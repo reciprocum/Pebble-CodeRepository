@@ -1,0 +1,24 @@
+{
+    "author": "reciprocum@gmail.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "coderepository",
+    "pebble": {
+        "capabilities": [
+            ""
+        ],
+        "displayName": "CodeRepository",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "uuid": "6087cd37-c909-4391-abdb-86e4db60713f",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}

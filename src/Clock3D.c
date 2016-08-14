@@ -2,7 +2,7 @@
    File  : Clock3D.c
    Author: Afonso Santos, Portugal
 
-   Last revision: 13h55 August 08 2016
+   Last revision: 14h05 August 14 2016
 */
 
 #include "Config.h"
@@ -13,7 +13,7 @@
 
 
 // Between the cube, the segment displays and the radial dials the biggest mesh has no more than 200 vertices.
-GPoint __Mesh_vertex_screenPoint[200] ;
+GPoint __Mesh3D_vertex_screenPoint[200] ;
 
 // Externaly provided interpolation tables.
 extern float     *spinRotationFraction    ;
@@ -23,7 +23,7 @@ extern float     *animTranslationFraction ;
 
 SegmentDisplayType   clock_displayType = CLOCK3D_DISPLAY_TYPE_DEFAULT ;
 
-Mesh                *clock_cube ;
+Mesh3D              *clock_cube ;
 
 static int8_t        clock_days              = -1 ;  // Initialy undefined.
 SegmentDisplay3D    *clock_days_leftDigitA ;
@@ -189,7 +189,7 @@ void
 Clock3D_finalize
 ( )
 {
-  free( Mesh_free            ( clock_cube                ) )     ; clock_cube                    = NULL ;
+  free( Mesh3D_free          ( clock_cube                ) )     ; clock_cube                    = NULL ;
 
   free( SegmentDisplay3D_free( clock_days_leftDigitB     ) )     ; clock_days_leftDigitB         = NULL ;
   free( SegmentDisplay3D_free( clock_days_leftDigitA     ) )     ; clock_days_leftDigitA         = NULL ;
@@ -1265,41 +1265,41 @@ Clock3D_updateDDHHMMSS
 
 void
 Clock3D_draw
-( GContext      *gCtx
-//, Clock3D          *this    // TODO
-, const Cam3D   *cam
-, const int      w
-, const int      h
-, const uint8_t  transparencyMode
+( GContext                      *gCtx
+//, Clock3D                     *this    // TODO
+, const Cam3D                   *cam
+, const int                      w
+, const int                      h
+, const Mesh3D_TransparencyMode  transparency
 )
 {
-  Mesh_draw( gCtx, clock_cube, cam, w, h, Clock3D_isAnimated( ) ? MODE_3D_TRANSPARENCY_XRAY : transparencyMode ) ;
+  Mesh3D_draw( gCtx, clock_cube, cam, w, h, Clock3D_isAnimated( ) ? MESH3D_TRANSPARENCY_XRAY : transparency ) ;
 
-  Mesh_draw( gCtx, clock_days_leftDigitB ->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_days_leftDigitA ->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_days_rightDigitB->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_days_rightDigitA->mesh, cam, w, h, transparencyMode ) ;
+  Mesh3D_draw( gCtx, clock_days_leftDigitB ->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_days_leftDigitA ->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_days_rightDigitB->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_days_rightDigitA->mesh, cam, w, h, transparency ) ;
 
-  Mesh_draw( gCtx, clock_hours_leftDigitB ->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_hours_leftDigitA ->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_hours_rightDigitB->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_hours_rightDigitA->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_hours_radial     ->mesh, cam, w, h, transparencyMode ) ;
+  Mesh3D_draw( gCtx, clock_hours_leftDigitB ->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_hours_leftDigitA ->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_hours_rightDigitB->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_hours_rightDigitA->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_hours_radial     ->mesh, cam, w, h, transparency ) ;
 
-  Mesh_draw( gCtx, clock_minutes_leftDigitB ->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_minutes_leftDigitA ->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_minutes_rightDigitB->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_minutes_rightDigitA->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_minutes_radial     ->mesh, cam, w, h, transparencyMode ) ;
+  Mesh3D_draw( gCtx, clock_minutes_leftDigitB ->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_minutes_leftDigitA ->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_minutes_rightDigitB->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_minutes_rightDigitA->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_minutes_radial     ->mesh, cam, w, h, transparency ) ;
 
-  Mesh_draw( gCtx, clock_seconds_leftDigit ->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_seconds_rightDigit->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_seconds_radial    ->mesh, cam, w, h, transparencyMode ) ;
+  Mesh3D_draw( gCtx, clock_seconds_leftDigit ->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_seconds_rightDigit->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_seconds_radial    ->mesh, cam, w, h, transparency ) ;
 
-  Mesh_draw( gCtx, clock_second100ths_leftDigit ->mesh, cam, w, h, transparencyMode ) ;
-  Mesh_draw( gCtx, clock_second100ths_rightDigit->mesh, cam, w, h, transparencyMode ) ;
+  Mesh3D_draw( gCtx, clock_second100ths_leftDigit ->mesh, cam, w, h, transparency ) ;
+  Mesh3D_draw( gCtx, clock_second100ths_rightDigit->mesh, cam, w, h, transparency ) ;
 
 #ifdef CLOCK3D_SECOND100THS_RADIAL
-  Mesh_draw( gCtx, clock_second100ths_radial->mesh, cam, w, h, transparencyMode ) ;
+  Mesh3D_draw( gCtx, clock_second100ths_radial->mesh, cam, w, h, transparency ) ;
 #endif
 }

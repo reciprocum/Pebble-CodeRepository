@@ -2,17 +2,17 @@
    File  : Cube.h
    Author: Afonso Santos, Portugal
 
-   Last revision: 10h34 July 27 2016
+   Last revision: 13h40 August 14 2016
 */
 
-#include "Mesh.h"
+#include "Mesh3D.h"
 
 
-Mesh* Cube_new( ) ;
+Mesh3D* Cube_new( ) ;
 
-void 
+void
 Cube_config
-( Mesh        *this          // Cube mesh being configured.
+( Mesh3D      *this          // Cube mesh being configured.
 , const float  size
 , Blinker     *inkBlinker
 ) ;

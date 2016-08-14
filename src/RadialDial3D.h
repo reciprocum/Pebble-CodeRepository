@@ -2,18 +2,18 @@
    File  : RadialDial3D.h
    Author: Afonso Santos, Portugal
 
-   Last revision: 15h35 August 06 2016
+   Last revision: 13h45 August 14 2016
 */
 
 #pragma once
 
 #include "RadialDial2D.h"
-#include "Mesh.h"
+#include "Mesh3D.h"
 #include "R3.h"
 
 
 typedef struct
-{ Mesh          *mesh ;
+{ Mesh3D        *mesh ;
   RadialDialType type ;
   int8_t         value ;          // Initialized with -1
 } RadialDial3D ;

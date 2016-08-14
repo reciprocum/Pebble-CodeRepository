@@ -2,13 +2,13 @@
    File  : SegmentDisplay3D.c
    Author: Afonso Santos, Portugal
 
-   Last revision: 13h50 August 08 2016
+   Last revision: 13h45 August 14 2016
 */
 
 #include "Config.h"
 #include "Binary.h"
 #include "SegmentDisplay3D.h"
-#include "Mesh.h"
+#include "Mesh3D.h"
 #include "TransformR3.h"
 
 
@@ -18,7 +18,7 @@ SegmentDisplay3D_free
 {
   if (this != NULL)
   {
-    free( Mesh_free( this->mesh ) ) ;
+    free( Mesh3D_free( this->mesh ) ) ;
     this->mesh = NULL ;
   }
 
@@ -55,29 +55,29 @@ SegmentDisplay3D_new
   switch (this->type = this->typeMax = typeMax)
   {
     case SEG_N7BONE:
-      this->mesh = Mesh_new( SEG_N7BONE_VERTEXINFO.pointsNum, SEG_N7BONE_EDGEINFO.edgesNum, 0 ) ;
+      this->mesh = Mesh3D_new( SEG_N7BONE_VERTEXINFO.pointsNum, SEG_N7BONE_EDGEINFO.edgesNum, 0 ) ;
       break ;
 
     case SEG_N7SKIN:
-      this->mesh = Mesh_new( SEG_N7SKIN_VERTEXINFO.pointsNum, SEG_N7SKIN_EDGEINFO.edgesNum, 0 ) ;
+      this->mesh = Mesh3D_new( SEG_N7SKIN_VERTEXINFO.pointsNum, SEG_N7SKIN_EDGEINFO.edgesNum, 0 ) ;
       break ;
     
     case SEG_N7BONESKIN:
     case SEG_N7SKINBONE:
-      this->mesh = Mesh_new( SEG_N7SKINBONE_VERTEXINFO.pointsNum, SEG_N7SKINBONE_EDGEINFO.edgesNum, 0 ) ;
+      this->mesh = Mesh3D_new( SEG_N7SKINBONE_VERTEXINFO.pointsNum, SEG_N7SKINBONE_EDGEINFO.edgesNum, 0 ) ;
       break ;
 
     case SEG_NCURVYBONE:
-      this->mesh = Mesh_new( SEG_NCURVYBONE_VERTEXINFO.pointsNum, SEG_NCURVYBONE_EDGEINFO.edgesNum, 0 ) ;
+      this->mesh = Mesh3D_new( SEG_NCURVYBONE_VERTEXINFO.pointsNum, SEG_NCURVYBONE_EDGEINFO.edgesNum, 0 ) ;
       break ;
 
     case SEG_NCURVYSKIN:
-      this->mesh = Mesh_new( SEG_NCURVYSKIN_VERTEXINFO.pointsNum, SEG_NCURVYSKIN_EDGEINFO.edgesNum, 0 ) ;
+      this->mesh = Mesh3D_new( SEG_NCURVYSKIN_VERTEXINFO.pointsNum, SEG_NCURVYSKIN_EDGEINFO.edgesNum, 0 ) ;
       break ;
 
     case SEG_NCURVYBONESKIN:
     case SEG_NCURVYSKINBONE:
-      this->mesh = Mesh_new( SEG_NCURVYSKINBONE_VERTEXINFO.pointsNum, SEG_NCURVYSKINBONE_EDGEINFO.edgesNum, 0 ) ;
+      this->mesh = Mesh3D_new( SEG_NCURVYSKINBONE_VERTEXINFO.pointsNum, SEG_NCURVYSKINBONE_EDGEINFO.edgesNum, 0 ) ;
       break ;
   }
 
@@ -182,68 +182,68 @@ SegmentDisplay3D_config
   switch (this->type = type)
   {
     case SEG_N7BONE:
-      Mesh_setFromI2XSTemplate( this->mesh, &SEG_N7BONE_VERTEXINFO, &SEG_N7BONE_EDGEINFO
-                              , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
-                              ) ;
+      Mesh3D_setFromI2XSTemplate( this->mesh, &SEG_N7BONE_VERTEXINFO, &SEG_N7BONE_EDGEINFO
+                                , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
+                                ) ;
       this->mesh->strokeWidth = 3 ;
       this->mesh->edgeAlternateMask_L2R = NULL ;
       break ;
 
     case SEG_N7SKIN:
-      Mesh_setFromI2XSTemplate( this->mesh, &SEG_N7SKIN_VERTEXINFO, &SEG_N7SKIN_EDGEINFO
-                              , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
-                              ) ;
+      Mesh3D_setFromI2XSTemplate( this->mesh, &SEG_N7SKIN_VERTEXINFO, &SEG_N7SKIN_EDGEINFO
+                                , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
+                                ) ;
       this->mesh->strokeWidth = 2 ;
       this->mesh->edgeAlternateMask_L2R = NULL ;
       break ;
 
     case SEG_N7BONESKIN:
-      Mesh_setFromI2XSTemplate( this->mesh, &SEG_N7SKINBONE_VERTEXINFO, &SEG_N7SKINBONE_EDGEINFO
-                              , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
-                              ) ;
+      Mesh3D_setFromI2XSTemplate( this->mesh, &SEG_N7SKINBONE_VERTEXINFO, &SEG_N7SKINBONE_EDGEINFO
+                                , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
+                                ) ;
       this->mesh->strokeWidth          = 1 ;   // Bone
       this->mesh->strokeWidthAlternate = 1 ;   // Skin
       this->mesh->edgeAlternateMask_L2R = SEG_N7BONESKIN_BONEMASK_L2R ;
       break ;
 
     case SEG_N7SKINBONE:
-      Mesh_setFromI2XSTemplate( this->mesh, &SEG_N7SKINBONE_VERTEXINFO, &SEG_N7SKINBONE_EDGEINFO
-                              , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
-                              ) ;
+      Mesh3D_setFromI2XSTemplate( this->mesh, &SEG_N7SKINBONE_VERTEXINFO, &SEG_N7SKINBONE_EDGEINFO
+                                , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
+                                ) ;
       this->mesh->strokeWidth          = 1 ;   // Skin
       this->mesh->strokeWidthAlternate = 1 ;   // Bone
       this->mesh->edgeAlternateMask_L2R = SEG_N7SKINBONE_BONEMASK_L2R ;
       break ;
 
     case SEG_NCURVYBONE:
-      Mesh_setFromI2XSTemplate( this->mesh, &SEG_NCURVYBONE_VERTEXINFO, &SEG_NCURVYBONE_EDGEINFO
-                              , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
-                              ) ;
+      Mesh3D_setFromI2XSTemplate( this->mesh, &SEG_NCURVYBONE_VERTEXINFO, &SEG_NCURVYBONE_EDGEINFO
+                                , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
+                                ) ;
       this->mesh->strokeWidth = 3 ;
       this->mesh->edgeAlternateMask_L2R = NULL ;
       break ;
 
     case SEG_NCURVYSKIN:
-      Mesh_setFromI2XSTemplate( this->mesh, &SEG_NCURVYSKIN_VERTEXINFO, &SEG_NCURVYSKIN_EDGEINFO
-                              , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
-                              ) ;
+      Mesh3D_setFromI2XSTemplate( this->mesh, &SEG_NCURVYSKIN_VERTEXINFO, &SEG_NCURVYSKIN_EDGEINFO
+                                , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
+                                ) ;
       this->mesh->strokeWidth = 2 ;
       this->mesh->edgeAlternateMask_L2R = NULL ;
       break ;
 
     case SEG_NCURVYBONESKIN:
-      Mesh_setFromI2XSTemplate( this->mesh, &SEG_NCURVYSKINBONE_VERTEXINFO, &SEG_NCURVYSKINBONE_EDGEINFO
-                              , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
-                              ) ;
-      this->mesh->strokeWidth          = 3 ;   // Bone
+      Mesh3D_setFromI2XSTemplate( this->mesh, &SEG_NCURVYSKINBONE_VERTEXINFO, &SEG_NCURVYSKINBONE_EDGEINFO
+                                , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
+                                ) ;
+      this->mesh->strokeWidth           = 3 ;   // Bone
       this->mesh->edgeAlternateMask_L2R = SEG_NCURVYBONESKIN_BONEMASK_L2R ;
       break ;
 
     case SEG_NCURVYSKINBONE:
-      Mesh_setFromI2XSTemplate( this->mesh, &SEG_NCURVYSKINBONE_VERTEXINFO, &SEG_NCURVYSKINBONE_EDGEINFO
-                              , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
-                              ) ;
-      this->mesh->strokeWidth          = 2 ;   // Skin
+      Mesh3D_setFromI2XSTemplate( this->mesh, &SEG_NCURVYSKINBONE_VERTEXINFO, &SEG_NCURVYSKINBONE_EDGEINFO
+                                , width, height, shiftX, rotationX, rotationY, rotationZ, anchor3D
+                                ) ;
+      this->mesh->strokeWidth           = 2 ;   // Skin
       this->mesh->edgeAlternateMask_L2R = SEG_NCURVYSKINBONE_BONEMASK_L2R ;
       break ;
 

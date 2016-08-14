@@ -2,7 +2,7 @@
    File  : RadialDial3D.c
    Author: Afonso Santos, Portugal
 
-   Last revision: 15h35 August 06 2016
+   Last revision: 13h45 August 14 2016
 */
 
 #include "Config.h"
@@ -18,7 +18,7 @@ RadialDial3D_free
 {
   if (this != NULL)
   {
-    free( Mesh_free( this->mesh ) ) ;
+    free( Mesh3D_free( this->mesh ) ) ;
     this->mesh = NULL ;
   }
 
@@ -55,21 +55,21 @@ RadialDial3D_new
   switch (this->type = type)
   {
     case RADIAL_DIAL_TYPE_24:
-      if ((this->mesh = Mesh_new( 48, RADIAL_DIAL_24_EDGEINFO.edgesNum, 0 )) == NULL)
+      if ((this->mesh = Mesh3D_new( 48, RADIAL_DIAL_24_EDGEINFO.edgesNum, 0 )) == NULL)
         return RadialDial3D_free( this ) ;
 
       this->mesh->edgeInfo = &RADIAL_DIAL_24_EDGEINFO ;
       break ;
 
     case RADIAL_DIAL_TYPE_60:
-      if ((this->mesh = Mesh_new( 120, RADIAL_DIAL_60_EDGEINFO.edgesNum, 0 )) == NULL)
+      if ((this->mesh = Mesh3D_new( 120, RADIAL_DIAL_60_EDGEINFO.edgesNum, 0 )) == NULL)
         return RadialDial3D_free( this ) ;
 
       this->mesh->edgeInfo = &RADIAL_DIAL_60_EDGEINFO ;
       break ;
 
     case RADIAL_DIAL_TYPE_100:
-      if ((this->mesh = Mesh_new( 200, RADIAL_DIAL_100_EDGEINFO.edgesNum, 0 )) == NULL)
+      if ((this->mesh = Mesh3D_new( 200, RADIAL_DIAL_100_EDGEINFO.edgesNum, 0 )) == NULL)
         return RadialDial3D_free( this ) ;
 
       this->mesh->edgeInfo = &RADIAL_DIAL_100_EDGEINFO ;
@@ -97,7 +97,7 @@ RadialDial3D_config
   if ((this == NULL) || (this->mesh == NULL))
     return ;
 
-  Mesh *mesh = this->mesh ;
+  Mesh3D *mesh = this->mesh ;
 
   Matrix34 transformationMtx ;
   Matrix34_transformation( &transformationMtx, rotationX, rotationY, rotationZ, anchor3D ) ;

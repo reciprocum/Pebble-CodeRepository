@@ -2,17 +2,17 @@
    File  : SegmentDisplay3D.h
    Author: Afonso Santos, Portugal
 
-   Last revision: 10h50 August 08 2016
+   Last revision: 13h45 August 14 2016
 */
 
 #pragma once
 
 #include "SegmentDisplay2D.h"
-#include "Mesh.h"
+#include "Mesh3D.h"
 
 
 typedef struct
-{ Mesh               *mesh ;
+{ Mesh3D             *mesh ;
   SegmentDisplayType  type, typeMax ;
   int8_t              value ;          // Initialized with -1
 } SegmentDisplay3D ;

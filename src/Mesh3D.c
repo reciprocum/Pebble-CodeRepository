@@ -1,8 +1,8 @@
 /*
-   File  : Mesh.c
+   File  : Mesh3D.c
    Author: Afonso Santos, Portugal
 
-   Last revision: 11h09 August 09 2016
+   Last revision: 13h40 August 14 2016
 */
 
 #include "Config.h"
@@ -12,13 +12,13 @@
 #include "Draw2D.h"
 #include "Cam3D.h"
 #include "Blinker.h"
-#include "Mesh.h"
+#include "Mesh3D.h"
 #include "Binary.h"
 
 
-Mesh*
-Mesh_free
-( Mesh *mesh )
+Mesh3D*
+Mesh3D_free
+( Mesh3D *mesh )
 {
   if (mesh != NULL)
   {
@@ -33,14 +33,14 @@ Mesh_free
 }
 
 
-Mesh*
-Mesh_new
+Mesh3D*
+Mesh3D_new
 ( const uint16_t verticesNum
 , const uint16_t edgesNum
 , const uint16_t facesNum
 )
 {
-  Mesh *mesh = malloc(sizeof(Mesh)) ;
+  Mesh3D *mesh = malloc(sizeof(Mesh3D)) ;
   
   if (mesh == NULL)
   {
@@ -54,9 +54,9 @@ Mesh_new
     if (mesh->vertices == NULL)
     {
 #ifdef LOG
-  APP_LOG( APP_LOG_LEVEL_ERROR, "Mesh_new:: mesh->vertices == NULL" ) ;
+  APP_LOG( APP_LOG_LEVEL_ERROR, "Mesh3D_new:: mesh->vertices == NULL" ) ;
 #endif
-      return Mesh_free( mesh ) ;
+      return Mesh3D_free( mesh ) ;
     }
   }
 
@@ -67,9 +67,9 @@ Mesh_new
     if (mesh->edgesState == NULL)
     {
 #ifdef LOG
-  APP_LOG( APP_LOG_LEVEL_ERROR, "Mesh_new:: mesh->edgesState == NULL" ) ;
+  APP_LOG( APP_LOG_LEVEL_ERROR, "Mesh3D_new:: mesh->edgesState == NULL" ) ;
 #endif
-      return Mesh_free( mesh ) ;
+      return Mesh3D_free( mesh ) ;
     }
   }
 
@@ -81,9 +81,9 @@ Mesh_new
     if (mesh->normal_worldCoord == NULL)
     {
 #ifdef LOG
-  APP_LOG( APP_LOG_LEVEL_ERROR, "Mesh_new:: mesh->normal_worldCoord == NULL" ) ;
+  APP_LOG( APP_LOG_LEVEL_ERROR, "Mesh3D_new:: mesh->normal_worldCoord == NULL" ) ;
 #endif
-      return Mesh_free( mesh ) ;
+      return Mesh3D_free( mesh ) ;
     }
   }
 
@@ -94,9 +94,9 @@ Mesh_new
     if (mesh->faces == NULL)
     {
 #ifdef LOG
-  APP_LOG( APP_LOG_LEVEL_ERROR, "Mesh_new:: mesh->faces == NULL" ) ;
+  APP_LOG( APP_LOG_LEVEL_ERROR, "Mesh3D_new:: mesh->faces == NULL" ) ;
 #endif
-      return Mesh_free( mesh ) ;
+      return Mesh3D_free( mesh ) ;
     }
   }
 
@@ -111,8 +111,8 @@ Mesh_new
 // Calculate the normal vector from the first 2 edges of each face.
 // TODO: extend to work properly even if first 2 edges are parallel to each other.
 void
-Mesh_calculateFaceNormals
-( Mesh *mesh )
+Mesh3D_calculateFaceNormals
+( Mesh3D *mesh )
 {
   if (mesh == NULL)
     return ;
@@ -120,10 +120,10 @@ Mesh_calculateFaceNormals
   if (mesh->edgeInfo == NULL)
     return ;
 
-  const Vertex      *vertices = mesh->vertices ;
-  const Edge        *edges    = mesh->edgeInfo->edges ;
-  const unsigned int facesNum = mesh->facesNum ;
-  Face          *faces    = mesh->faces ;
+  const Vertex       *vertices = mesh->vertices ;
+  const Edge         *edges    = mesh->edgeInfo->edges ;
+  const unsigned int  facesNum = mesh->facesNum ;
+  Face               *faces    = mesh->faces ;
 
   for (unsigned int fIdx = 0 ; fIdx < facesNum ; ++fIdx)
   {
@@ -151,8 +151,8 @@ Mesh_calculateFaceNormals
 
 
 void
-Mesh_setVerticesFromI2XSTemplate
-( Mesh                *mesh
+Mesh3D_setVerticesFromI2XSTemplate
+( Mesh3D                *mesh
 , const I2_8_PathInfo *template
 , const float          width
 , const float          height
@@ -178,8 +178,8 @@ Mesh_setVerticesFromI2XSTemplate
 
 
 void
-Mesh_setVerticesFromI3XSTemplate
-( Mesh                 *mesh
+Mesh3D_setVerticesFromI3XSTemplate
+( Mesh3D               *mesh
 , const I3XS_PointInfo *template
 , const float           size
 )
@@ -199,8 +199,8 @@ Mesh_setVerticesFromI3XSTemplate
 
 
 void
-Mesh_transform
-( Mesh        *mesh
+Mesh3D_transform
+( Mesh3D      *mesh
 , const float  rotationX
 , const float  rotationY
 , const float  rotationZ
@@ -226,8 +226,8 @@ Mesh_transform
 
 
 void
-Mesh_setFromI2XSTemplate
-( Mesh                *mesh
+Mesh3D_setFromI2XSTemplate
+( Mesh3D              *mesh
 , const I2_8_PathInfo *verticesInfo
 , const EdgeInfo      *edgeInfo
 , const float          width
@@ -239,15 +239,15 @@ Mesh_setFromI2XSTemplate
 , const R3            *anchor3D
 )
 {
-  Mesh_setVerticesFromI2XSTemplate( mesh, verticesInfo, width, height, shiftX2D ) ;
+  Mesh3D_setVerticesFromI2XSTemplate( mesh, verticesInfo, width, height, shiftX2D ) ;
   mesh->edgeInfo = edgeInfo ;
-  Mesh_transform( mesh, rotationX, rotationY, rotationZ, anchor3D ) ;
+  Mesh3D_transform( mesh, rotationX, rotationY, rotationZ, anchor3D ) ;
 }
 
 
 void
-Mesh_setFromI3XSTemplate
-( Mesh                 *mesh
+Mesh3D_setFromI3XSTemplate
+( Mesh3D               *mesh
 , const I3XS_PointInfo *vertexInfo
 , const EdgeInfo       *edgeInfo
 , const float           size
@@ -257,20 +257,20 @@ Mesh_setFromI3XSTemplate
 , const R3             *anchor3D
 )
 {
-  Mesh_setVerticesFromI3XSTemplate( mesh, vertexInfo, size ) ;
+  Mesh3D_setVerticesFromI3XSTemplate( mesh, vertexInfo, size ) ;
   mesh->edgeInfo = edgeInfo ;
-  Mesh_transform( mesh, rotationX, rotationY, rotationZ, anchor3D ) ;
+  Mesh3D_transform( mesh, rotationX, rotationY, rotationZ, anchor3D ) ;
 }
 
 
 void
-Mesh_draw
-( GContext      *gCtx
-, Mesh          *mesh
-, const Cam3D   *cam
-, const int      w
-, const int      h
-, const uint8_t  transparencyMode
+Mesh3D_draw
+( GContext                      *gCtx
+, Mesh3D                        *mesh
+, const Cam3D                   *cam
+, const int                      w
+, const int                      h
+, const Mesh3D_TransparencyMode  transparency
 )
 {
   if ( (mesh == NULL)
@@ -288,22 +288,22 @@ Mesh_draw
   Face                *faces       = mesh->faces ;
 
   // Assert visibility of edges.
-  switch (transparencyMode)
+  switch (transparency)
   {
-    case MODE_3D_TRANSPARENCY_WIREFRAME:                    // All edges are visible in this mode.
+    case MESH3D_TRANSPARENCY_WIREFRAME:                    // All edges are visible in this mode.
       for ( unsigned int me = 0 ; me < edgesNum ; ++me )
         edgesState[me].isHidden = false ;
 
       break ;                                               // No need to waste time with normal vectors, etc.
 
-    case MODE_3D_TRANSPARENCY_SOLID:
-    case MODE_3D_TRANSPARENCY_XRAY:
+    case MESH3D_TRANSPARENCY_SOLID:
+    case MESH3D_TRANSPARENCY_XRAY:
     default :
       if (mesh->normal_worldCoord)
         { // Planar mesh: determine its visibility from its normal vector. Use any vertex as anchor for normal.
-          R3 towardsMesh_normalAnchor ;
-          R3_subtract( &towardsMesh_normalAnchor, &vertices[0].worldCoord, &cam->viewPoint) ;
-          const bool meshIsVisible = (R3_dotProduct( mesh->normal_worldCoord, &towardsMesh_normalAnchor) < 0.0) ;
+          R3 towardsMesh3D_normalAnchor ;
+          R3_subtract( &towardsMesh3D_normalAnchor, &vertices[0].worldCoord, &cam->viewPoint) ;
+          const bool meshIsVisible = (R3_dotProduct( mesh->normal_worldCoord, &towardsMesh3D_normalAnchor) < 0.0) ;
       
           for ( unsigned int me = 0 ; me < edgesNum ; ++me )    // Mark all this meshe's edges with mesh visibility result.
               edgesState[me].isHidden = meshIsVisible ;
@@ -340,19 +340,19 @@ Mesh_draw
             }
           }
         }
-  } // switch (transparencyMode)
+  } // switch (transparency)
 
   // Assert visibility of vertices.
-  switch (transparencyMode)
+  switch (transparency)
   {
-    case MODE_3D_TRANSPARENCY_WIREFRAME:                  // All vertices are plotted in these 2 modes.
-    case MODE_3D_TRANSPARENCY_XRAY:
+    case MESH3D_TRANSPARENCY_WIREFRAME:                  // All vertices are plotted in these 2 modes.
+    case MESH3D_TRANSPARENCY_XRAY:
       for ( unsigned int mv = 0 ; mv < verticesNum ; ++mv )
         vertices[mv].state.isHidden = false ;
 
       break ;
 
-    case MODE_3D_TRANSPARENCY_SOLID:                      // Only vertices bellonging to visible edges need to be plotted.
+    case MESH3D_TRANSPARENCY_SOLID:                      // Only vertices bellonging to visible edges need to be plotted.
     default :
       // Initialize all vertices as being not visible.
       for ( unsigned int mv = 0 ; mv < verticesNum ; ++mv )
@@ -391,8 +391,8 @@ Mesh_draw
         Cam3D_view( &vCamera, cam, &v->worldCoord ) ;
   
         // calculate device coordinates of vertex.
-        __Mesh_vertex_screenPoint[mv].x = k * vCamera.x  +  bX ;
-        __Mesh_vertex_screenPoint[mv].y = k * vCamera.y  +  bY ;
+        __Mesh3D_vertex_screenPoint[mv].x = k * vCamera.x  +  bX ;
+        __Mesh3D_vertex_screenPoint[mv].y = k * vCamera.y  +  bY ;
       }
     }
   }
@@ -401,17 +401,17 @@ Mesh_draw
   ink_t inkVisible = (mesh->inkBlinker != NULL ? mesh->inkBlinker->value : INK100 ) ;
   ink_t inkHidden ;
 
-  switch (transparencyMode)
+  switch (transparency)
   {
-    case MODE_3D_TRANSPARENCY_XRAY:
+    case MESH3D_TRANSPARENCY_XRAY:
       inkHidden = INK33 ;                 // Dimmed to 33% brightness.
       break ;
 
-    case MODE_3D_TRANSPARENCY_WIREFRAME:
+    case MESH3D_TRANSPARENCY_WIREFRAME:
       inkHidden = inkVisible ;            // Fully visible.
       break ;
 
-    case MODE_3D_TRANSPARENCY_SOLID:
+    case MESH3D_TRANSPARENCY_SOLID:
     default :
       inkHidden = INK0 ;                  // Not visible.
       break ;
@@ -458,8 +458,8 @@ Mesh_draw
         }
       }
 
-      const GPoint p0 = __Mesh_vertex_screenPoint[edges[me].v1] ;
-      const GPoint p1 = __Mesh_vertex_screenPoint[edges[me].v2] ;
+      const GPoint p0 = __Mesh3D_vertex_screenPoint[edges[me].v1] ;
+      const GPoint p1 = __Mesh3D_vertex_screenPoint[edges[me].v2] ;
 
       //draw v1-v2 2D line.
 #ifdef QEMU

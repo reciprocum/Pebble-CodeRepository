@@ -1,8 +1,8 @@
 /*
-   File  : Mesh.h
+   File  : Mesh3D.h
    Author: Afonso Santos, Portugal
 
-   Last revision: 13h30 August 06 2016
+   Last revision: 13h40 August 14 2016
 */
 
 #pragma once
@@ -14,6 +14,13 @@
 #include "Draw2D.h"
 #include "Cam3D.h"
 #include "Blinker.h"
+
+
+typedef enum { MESH3D_TRANSPARENCY_SOLID
+             , MESH3D_TRANSPARENCY_XRAY
+             , MESH3D_TRANSPARENCY_WIREFRAME
+             }
+Mesh3D_TransparencyMode ;
 
 
 typedef struct
@@ -59,19 +66,19 @@ typedef struct
   uint8_t              strokeWidthAlternate ;
   GColor               strokeColorAlternate ;
   const unsigned char *edgeAlternateMask_L2R ;      // BitString mask of wich edges use the edgeStroke[Width|Color]]Alternate properties.
-} Mesh ;
+} Mesh3D ;
 
 
-Mesh*  Mesh_free( Mesh *mesh ) ;
-Mesh*  Mesh_new( const uint16_t verticesNum, const uint16_t edgesNum, const uint16_t facesNum ) ;
+Mesh3D*  Mesh3D_free( Mesh3D *mesh ) ;
+Mesh3D*  Mesh3D_new( const uint16_t verticesNum, const uint16_t edgesNum, const uint16_t facesNum ) ;
 
 // Calculate the normal vector from the first 2 edges of each face.
 // TODO: extend to work properly even if first 2 edges are parallel to each other.
-void  Mesh_calculateFaceNormals( Mesh *mesh ) ;
+void  Mesh3D_calculateFaceNormals( Mesh3D *mesh ) ;
 
 void
-Mesh_setVerticesFromI2XSTemplate
-( Mesh                *mesh
+Mesh3D_setVerticesFromI2XSTemplate
+( Mesh3D              *mesh
 , const I2_8_PathInfo *template
 , const float          width
 , const float          height
@@ -79,15 +86,15 @@ Mesh_setVerticesFromI2XSTemplate
 ) ;
 
 void
-Mesh_setVerticesFromI3XSTemplate
-( Mesh                 *mesh
+Mesh3D_setVerticesFromI3XSTemplate
+( Mesh3D               *mesh
 , const I3XS_PointInfo *template
 , const float           size
 ) ;
 
 void
-Mesh_setFromI2XSTemplate
-( Mesh                *mesh
+Mesh3D_setFromI2XSTemplate
+( Mesh3D              *mesh
 , const I2_8_PathInfo *verticesInfo
 , const EdgeInfo      *edgeInfo
 , const float          width
@@ -100,8 +107,8 @@ Mesh_setFromI2XSTemplate
 ) ;
 
 void
-Mesh_setFromI3XSTemplate
-( Mesh                 *mesh
+Mesh3D_setFromI3XSTemplate
+( Mesh3D               *mesh
 , const I3XS_PointInfo *vertexInfo
 , const EdgeInfo       *edgeInfo
 , const float           size
@@ -112,8 +119,8 @@ Mesh_setFromI3XSTemplate
 ) ;
 
 void
-Mesh_transform
-( Mesh        *mesh
+Mesh3D_transform
+( Mesh3D      *mesh
 , const float  rotationX
 , const float  rotationY
 , const float  rotationZ
@@ -123,14 +130,14 @@ Mesh_transform
 // This variable is critical to the draw algorithm.
 // Used to pre-calculate (only once per vertex) the screen coordinates of the vertexes (after 3D->2D camera projected).
 // MUST be provided (and adequately dimensioned to the MAX number of vertexes of all the meshes) by main.c
-extern GPoint __Mesh_vertex_screenPoint[] ;
+extern GPoint __Mesh3D_vertex_screenPoint[] ;
 
 void
-Mesh_draw
-( GContext      *gCtx
-, Mesh          *mesh
-, const Cam3D   *cam
-, const int      w
-, const int      h
-, const uint8_t  transparencyMode
+Mesh3D_draw
+( GContext                      *gCtx
+, Mesh3D                        *mesh
+, const Cam3D                   *cam
+, const int                      w
+, const int                      h
+, const Mesh3D_TransparencyMode  transparency
 ) ;

@@ -2,7 +2,7 @@
    File  : Clock3D.h
    Author: Afonso Santos, Portugal
 
-   Last revision: 17h30 August 08 2016
+   Last revision: 13h45 August 14 2016
 */
 
 #pragma once
@@ -13,8 +13,8 @@
 
 // World objects & parameters
 
-// ENUM: SEG_N7BONE SEG_N7SKIN SEG_N7SKINBONE SEG_N7BONESKIN SEG_NCURVYBONE SEG_NCURVYSKIN SEG_NCURVYBONESKIN SEG_NCURVYSKINBONE
-// WARNING!: SEG_NCURVYSKIN, SEG_NCURVYBONESKIN & SEG_NCURVYSKINBONE consumes a LOT of RAM !!!
+// DISPLAY_TYPE OPTIONS: SEG_N7BONE SEG_N7SKIN SEG_N7SKINBONE SEG_NCURVYBONE SEG_NCURVYSKIN
+// WARNING!: SEG_NCURVYSKIN consumes a LOT of RAM !!!
 #define  CLOCK3D_DISPLAY_TYPE_MAJOR    SEG_NCURVYBONESKIN
 #define  CLOCK3D_DISPLAY_TYPE_DEFAULT  SEG_NCURVYBONESKIN
 
@@ -77,10 +77,10 @@ Clock3D_setTime_DDHHMMSS
 
 void
 Clock3D_draw
-( GContext      *gCtx
-//, Clock3D          *this    // TODO
-, const Cam3D   *cam
-, const int      w
-, const int      h
-, const uint8_t  transparencyMode
+( GContext                      *gCtx
+//, Clock3D                     *this    // TODO
+, const Cam3D                   *cam
+, const int                      w
+, const int                      h
+, const Mesh3D_TransparencyMode  transparency
 ) ;

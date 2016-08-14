@@ -2,12 +2,12 @@
    File  : Cube.c
    Author: Afonso Santos, Portugal
 
-   Last revision: 12h55 August 05 2016
+   Last revision: 13h40 August 14 2016
 */
 
 #include "Config.h"
 #include "I3.h"
-#include "Mesh.h"
+#include "Mesh3D.h"
 
 
 static I3XS_PointInfo CUBE_VERTEXINFO
@@ -83,20 +83,20 @@ static FaceInfo CUBE_FACE5
 ;
 
 
-Mesh*
+Mesh3D*
 Cube_new
 ( )
 {
-  return Mesh_new( CUBE_VERTEXINFO.pointsNum   // # of vertices
-                 , CUBE_EDGEINFO.edgesNum      // # of edges
-                 , 6                           // # of faces
-                 ) ;
+  return Mesh3D_new( CUBE_VERTEXINFO.pointsNum   // # of vertices
+                   , CUBE_EDGEINFO.edgesNum      // # of edges
+                   , 6                           // # of faces
+                   ) ;
 }
 
 
 void
 Cube_config
-( Mesh        *this          // Cube mesh being configured.
+( Mesh3D      *this          // Cube mesh being configured.
 , const float  size
 , Blinker     *inkBlinker
 )
@@ -106,15 +106,15 @@ Cube_config
 
   this->inkBlinker = inkBlinker ;
 
-  Mesh_setFromI3XSTemplate( this
-                          , &CUBE_VERTEXINFO
-                          , &CUBE_EDGEINFO
-                          , size
-                          , 0            // rotationX
-                          , 0            // rotationY
-                          , 0            // rotationZ
-                          , &R3_origin   // anchor3D
-                          ) ;
+  Mesh3D_setFromI3XSTemplate( this
+                            , &CUBE_VERTEXINFO
+                            , &CUBE_EDGEINFO
+                            , size
+                            , 0            // rotationX
+                            , 0            // rotationY
+                            , 0            // rotationZ
+                            , &R3_origin   // anchor3D
+                            ) ;
 
   // Set faces.
   this->faces[0].faceInfo = &CUBE_FACE0 ;
@@ -124,5 +124,5 @@ Cube_config
   this->faces[4].faceInfo = &CUBE_FACE4 ;
   this->faces[5].faceInfo = &CUBE_FACE5 ;
 
-  Mesh_calculateFaceNormals( this ) ;
+  Mesh3D_calculateFaceNormals( this ) ;
 }
